@@ -38,3 +38,33 @@ button#reset {
     background-color: #dc3545;
     color: white;
 }
+
+/* Premium Theme Styles */
+body.premium {
+    background-color: #1a1a1a;
+    color: #f1c40f;
+}
+
+body.premium h1 {
+    color: #f1c40f;
+}
+
+body.premium #counter {
+    color: #f1c40f;
+}
+
+body.premium button {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    border: 1px solid #f1c40f;
+}
+
+body.premium button#increment {
+    background-color: #d4af37; /* Gold */
+    color: #1a1a1a;
+}
+
+body.premium button#reset {
+    background-color: #c0392b;
+    color: white;
+    border: none;
+}
