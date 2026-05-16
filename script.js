@@ -1,7 +1,26 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     // Initialize Telegram Web App
     const tg = window.Telegram.WebApp;
     tg.expand(); // Expand the app to full height
+
+    // Check Premium Status Securely
+    if (tg.initData) {
+        try {
+            const res = await fetch('/api/check-premium', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ initData: tg.initData })
+            });
+            const data = await res.json();
+            if (data.premium) {
+                document.body.classList.add("premium");
+                const pBtn = document.getElementById("premium-btn");
+                if (pBtn) pBtn.style.display = "none";
+            }
+        } catch (e) {
+            console.error("Failed to check premium status", e);
+        }
+    }
 
     // Add a close button to exit the app
     const closeButton = document.createElement("button");
@@ -54,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     tg.openInvoice(data.invoiceLink, (status) => {
                         if (status === 'paid') {
                             document.body.classList.add("premium");
+                            premiumBtn.style.display = "none";
                             tg.showAlert("Thank you! Premium theme unlocked.");
                         } else {
                             console.log("Payment status:", status);
