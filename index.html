@@ -15,9 +15,20 @@
     <div class="container">
         <h1>TASBIH COUNTER</h1>
         
+        <div class="tasbih-selector">
+            <select id="tasbih-type">
+                <option value="custom">Free Count</option>
+                <option value="subhanallah">Subhanallah (33)</option>
+                <option value="alhamdulillah">Alhamdulillah (33)</option>
+                <option value="allahuakbar">Allahu Akbar (34)</option>
+                <option value="astaghfirullah">Astaghfirullah (100)</option>
+            </select>
+        </div>
+        
         <div class="counter-wrapper">
             <span class="label">TOTAL BEADS</span>
             <div id="counter">0</div>
+            <div id="target-display" style="display: none;">/ 0</div>
         </div>
 
         <div class="controls">

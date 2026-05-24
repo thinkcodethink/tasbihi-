@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -11,11 +13,47 @@ exports.handler = async (event, context) => {
     };
   }
 
+  let body;
+  try {
+    body = JSON.parse(event.body);
+  } catch (err) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
+  }
+
+  const { initData } = body;
+  if (!initData) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'No initData provided' }) };
+  }
+
+  // Verify Telegram initData signature
+  const urlParams = new URLSearchParams(initData);
+  const hash = urlParams.get('hash');
+  urlParams.delete('hash');
+  
+  const keys = Array.from(urlParams.keys()).sort();
+  const dataCheckString = keys.map(key => `${key}=${urlParams.get(key)}`).join('\n');
+  
+  const secretKey = crypto.createHmac('sha256', 'WebAppData').update(BOT_TOKEN).digest();
+  const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
+
+  if (calculatedHash !== hash) {
+    return { statusCode: 403, body: JSON.stringify({ error: 'Invalid signature' }) };
+  }
+
+  // Extract user ID safely to include in payload
+  let user;
+  try {
+    user = JSON.parse(urlParams.get('user'));
+  } catch (e) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid user object' }) };
+  }
+  const userId = user && user.id ? user.id.toString() : 'unknown';
+
   const TELEGRAM_API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/createInvoiceLink`;
   const payload = {
     title: "Premium Theme",
     description: "Unlock the premium dark and gold theme for your Tasbih app.",
-    payload: "premium_theme_unlock",
+    payload: `premium_theme_unlock_${userId}`,
     currency: "XTR",
     prices: [{ label: "Premium Theme", amount: 50 }]
   };

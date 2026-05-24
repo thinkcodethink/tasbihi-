@@ -5,6 +5,13 @@ exports.handler = async (event, context) => {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
+  const TELEGRAM_SECRET_TOKEN = process.env.TELEGRAM_SECRET_TOKEN;
+  const requestSecretToken = event.headers['x-telegram-bot-api-secret-token'];
+  
+  if (TELEGRAM_SECRET_TOKEN && requestSecretToken !== TELEGRAM_SECRET_TOKEN) {
+    return { statusCode: 403, body: 'Unauthorized' };
+  }
+
   let body;
   try {
     body = JSON.parse(event.body);

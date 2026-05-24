@@ -41,19 +41,62 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Counter logic
     let count = 0;
+    let targetCount = null;
     const counterDisplay = document.getElementById("counter");
+    const targetDisplay = document.getElementById("target-display");
+    const counterWrapper = document.querySelector(".counter-wrapper");
     const incrementBtn = document.getElementById("increment-btn");
     const resetBtn = document.getElementById("reset-btn");
+    const tasbihTypeSelect = document.getElementById("tasbih-type");
+
+    const tasbihTargets = {
+        'custom': null,
+        'subhanallah': 33,
+        'alhamdulillah': 33,
+        'allahuakbar': 34,
+        'astaghfirullah': 100
+    };
+
+    function updateTargetDisplay() {
+        if (targetCount) {
+            targetDisplay.textContent = `/ ${targetCount}`;
+            targetDisplay.style.display = "block";
+        } else {
+            targetDisplay.style.display = "none";
+        }
+    }
+
+    tasbihTypeSelect.addEventListener("change", (e) => {
+        targetCount = tasbihTargets[e.target.value];
+        count = 0; // Reset count when changing type
+        counterDisplay.textContent = count;
+        counterWrapper.classList.remove("target-reached-pulse");
+        updateTargetDisplay();
+    });
 
     incrementBtn.addEventListener("click", () => {
         count++;
         counterDisplay.textContent = count;
-        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        
+        counterWrapper.classList.remove("target-reached-pulse"); // Reset pulse if already reached and continuing
+
+        if (targetCount && count === targetCount) {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('heavy');
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+            // Trigger visual pulse
+            void counterWrapper.offsetWidth; // Trigger reflow to restart animation
+            counterWrapper.classList.add("target-reached-pulse");
+        } else {
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
     });
 
     resetBtn.addEventListener("click", () => {
         count = 0;
         counterDisplay.textContent = count;
+        counterWrapper.classList.remove("target-reached-pulse");
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
     });
 
@@ -66,7 +109,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         premiumBtn.addEventListener("click", async () => {
             try {
-                const response = await fetch('/api/create-invoice', { method: 'POST' });
+                const response = await fetch('/api/create-invoice', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ initData: tg.initData })
+                });
                 const data = await response.json();
                 
                 if (data.invoiceLink) {

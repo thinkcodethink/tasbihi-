@@ -172,3 +172,66 @@ body.premium .counter-wrapper {
 body.premium button {
     color: #f1c40f;
 }
+
+.tasbih-selector {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#tasbih-type {
+    width: 100%;
+    padding: 12px 15px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-color);
+    border-radius: 12px;
+    outline: none;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-align: center;
+}
+
+#tasbih-type option {
+    background: #fff; /* fallback for non-supporting browsers/OS */
+    color: #333;
+    font-weight: 600;
+}
+
+body.premium #tasbih-type option {
+    background: #333;
+    color: #f1c40f;
+}
+
+#target-display {
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 0.6;
+    margin-top: 5px;
+}
+
+@keyframes targetReachedPulse {
+    0% { transform: scale(1); box-shadow: 0 0 30px var(--counter-glow), inset 0 0 20px rgba(255,255,255,0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 50px var(--counter-glow), inset 0 0 30px rgba(255,255,255,0.4); }
+    100% { transform: scale(1); box-shadow: 0 0 30px var(--counter-glow), inset 0 0 20px rgba(255,255,255,0.2); }
+}
+
+body.premium .counter-wrapper.target-reached-pulse {
+    animation: targetReachedPulsePremium 0.5s ease;
+}
+
+@keyframes targetReachedPulsePremium {
+    0% { transform: scale(1); box-shadow: 0 0 40px rgba(241, 196, 15, 0.4), inset 0 0 20px rgba(241, 196, 15, 0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(241, 196, 15, 0.8), inset 0 0 30px rgba(241, 196, 15, 0.4); }
+    100% { transform: scale(1); box-shadow: 0 0 40px rgba(241, 196, 15, 0.4), inset 0 0 20px rgba(241, 196, 15, 0.2); }
+}
+
+.counter-wrapper.target-reached-pulse {
+    animation: targetReachedPulse 0.5s ease;
+}
