@@ -67,13 +67,40 @@ body {
     align-items: center;
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
 h1 {
     font-size: 20px;
     font-weight: 700;
     letter-spacing: 1px;
-    margin-top: 0;
-    margin-bottom: 40px;
+    margin: 0;
     opacity: 0.9;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    backdrop-filter: none;
+    flex: none;
+}
+
+.icon-btn:hover {
+    background: var(--btn-glass);
+    transform: scale(1.1);
 }
 
 .counter-wrapper {
@@ -81,7 +108,7 @@ h1 {
     width: 220px;
     height: 220px;
     border-radius: 50%;
-    border: 4px solid var(--counter-glow);
+    background: var(--glass-bg); /* Add slight background so it looks like a button */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -89,6 +116,32 @@ h1 {
     box-shadow: 0 0 30px var(--counter-glow), inset 0 0 20px rgba(255,255,255,0.2);
     margin-bottom: 40px;
     transition: transform 0.1s ease;
+}
+
+.progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
+    pointer-events: none;
+}
+
+.progress-ring__circle {
+    transition: stroke-dashoffset 0.3s ease;
+    stroke: var(--counter-glow);
+    stroke-linecap: round;
+}
+
+body.premium .progress-ring__circle {
+    stroke: rgba(241, 196, 15, 0.8);
+}
+
+.counter-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
 }
 
 .counter-wrapper:active {
@@ -108,6 +161,17 @@ h1 {
     font-size: 72px;
     font-weight: 700;
     line-height: 1;
+    display: inline-block;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.counter-number.pop-animate {
+    animation: pop 0.2s ease-out;
 }
 
 .controls {

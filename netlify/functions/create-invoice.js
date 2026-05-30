@@ -36,8 +36,15 @@ exports.handler = async (event, context) => {
   const secretKey = crypto.createHmac('sha256', 'WebAppData').update(BOT_TOKEN).digest();
   const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
 
-  if (calculatedHash !== hash) {
+  if (calculatedHash.length !== hash.length || !crypto.timingSafeEqual(Buffer.from(calculatedHash), Buffer.from(hash))) {
     return { statusCode: 403, body: JSON.stringify({ error: 'Invalid signature' }) };
+  }
+
+  // Validate auth_date to prevent replay attacks (24 hours expiration)
+  const authDate = parseInt(urlParams.get('auth_date'), 10);
+  const now = Math.floor(Date.now() / 1000);
+  if (!authDate || now - authDate > 86400) {
+    return { statusCode: 403, body: JSON.stringify({ error: 'Session expired' }) };
   }
 
   // Extract user ID safely to include in payload

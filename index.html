@@ -13,7 +13,13 @@
 <body>
     <div class="background-mesh"></div>
     <div class="container">
-        <h1>TASBIH COUNTER</h1>
+        <div class="header">
+            <h1>TASBIH COUNTER</h1>
+            <button id="sound-toggle" class="icon-btn" title="Toggle Sound">
+                <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                <svg id="sound-icon-off" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><polygon points="9 9 11 5 11 19 10 18.18"></polygon><path d="M15.54 8.46a5 5 0 0 1 5.8 5.8"></path><path d="M19.07 4.93a10 10 0 0 1 1.76 11.23"></path><path d="M2 9h4l5 4"></path></svg>
+            </button>
+        </div>
         
         <div class="tasbih-selector">
             <select id="tasbih-type">
@@ -26,9 +32,14 @@
         </div>
         
         <div class="counter-wrapper">
-            <span class="label">TOTAL BEADS</span>
-            <div id="counter">0</div>
-            <div id="target-display" style="display: none;">/ 0</div>
+            <svg class="progress-ring" width="220" height="220">
+                <circle class="progress-ring__circle" stroke="currentColor" stroke-width="6" fill="transparent" r="104" cx="110" cy="110"/>
+            </svg>
+            <div class="counter-content">
+                <span class="label">TOTAL BEADS</span>
+                <div id="counter" class="counter-number">0</div>
+                <div id="target-display" style="display: none;">/ 0</div>
+            </div>
         </div>
 
         <div class="controls">

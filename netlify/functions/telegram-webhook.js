@@ -38,6 +38,11 @@ exports.handler = async (event, context) => {
 
   // Successful payment - The user actually paid
   if (body.message && body.message.successful_payment) {
+    const payload = body.message.successful_payment.invoice_payload;
+    if (!payload || !payload.startsWith('premium_theme_unlock_')) {
+      return { statusCode: 200, body: 'Ignored: Not a premium theme payment' };
+    }
+
     const userId = body.message.from.id.toString();
     
     // Store in Netlify Blobs
